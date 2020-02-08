@@ -8,10 +8,6 @@
 
 import UIKit
 import WebKit
-public protocol LosslessStringConvertible: CustomStringConvertible {
-  init? (_ description: String)
-}
-
 
 class VideoDetailViewController: UIViewController {
 
@@ -40,9 +36,9 @@ class VideoDetailViewController: UIViewController {
           self.titleLabel.text = vid.videoTitle
           self.descriptionLabel.text = vid.videoDescription
           
-            let width: CGFloat = self.view.frame.size.width
+            let width = self.view.frame.size.width
           
-            let height: CGFloat = width/320*180
+            let height = width/320*180
             
             let w = width.description
             
@@ -58,7 +54,7 @@ class VideoDetailViewController: UIViewController {
             
             let s4 = " width=\"" + (w) + "\" src=\"http://www.youtube.com/"
             
-            let s5 = "embed/" + vid.videoID + "?showinfo=0&modestbranding=1&"
+            let s5 = "embed/" + vid.videoId + "?showinfo=0&modestbranding=1&"
             
             let s6 = "frameborder=0&rel=0\"></iframe></body></html>"
         
@@ -68,6 +64,5 @@ class VideoDetailViewController: UIViewController {
             self.webView.loadHTMLString(videoEmbedString, baseURL: nil)
             
         }
-        
     }
 }

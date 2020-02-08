@@ -10,8 +10,9 @@ import UIKit
 
 class Video: NSObject {
     
-    var videoID: String = ""
+    var videoId: String = ""
     var videoTitle: String = ""
     var videoDescription: String = ""
+    var videoThumbnailURl: String = ""
 
 }

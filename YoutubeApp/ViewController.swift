@@ -8,10 +8,11 @@
 
 import UIKit
 
-class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, VideoModelDelegate {
 
     @IBOutlet weak var tableview: UITableView!
     var videos: [Video] = [Video]()
+    var model:VideoModel = VideoModel()
     
     var selectedVideo : Video?
     
@@ -19,11 +20,31 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
-        self.videos = VideoModel().getVideos()
+        self.model.delegate = self
+        
+        //MARK:Static VideoModel Call
+       // self.videos = model.getVideos()
+        
+        //MARK:Fire off request to get videos
+        model.getFeedVideos()
         
         self.tableview.dataSource = self
         self.tableview.delegate = self
     }
+    
+    //MARK: - VideoModel Delegate Methods
+    
+    func dataReady() {
+        
+        // Access the video objects that have been downloaded
+        self.videos = self.model.videoArray
+        
+        //Tell the tableview to reload
+        self.tableview.reloadData()
+        
+    }
+    
+    //MARK: - TableView Delegates Methods
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         
@@ -47,17 +68,17 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         label.text = videoTitle
         
         //Construct Video Thumbnail URL
-        let videoThumbnailUrlString = "https://i.ytimg.com/vi/" + videos[indexPath.row].videoID + "/maxresdefault.jpg"
+        let videoThumbnailUrlString = videos[indexPath.row].videoThumbnailURl
         
         //Create NSURL object
         let videoThumbnailUrl = URL(string: videoThumbnailUrlString)
         
         if videoThumbnailUrl != nil{
             
-            //Create NSURL Request Object
+            //Create URL Request Object
             let request = URLRequest(url: videoThumbnailUrl!)
             
-            //Create NSURL Session
+            //Create URL Session
             let session = URLSession.shared
             
             //Create Data Task and pass in the Request
@@ -78,7 +99,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                
         }
             
-        
         return cell
     }
     
